@@ -1,0 +1,13 @@
+{
+	"connect": {
+		"label": {
+			"node_name": "Nome",
+			"maximo_url": "Endereço do Maximo",
+			"username": "Usuário do Maximo",
+			"password": "Senha do Maximo",
+			"lean": "Lean",
+			"tenantCode": "Tenant Code",
+			"hint": "Conectar no IBM Maximo"
+		}
+	}
+}

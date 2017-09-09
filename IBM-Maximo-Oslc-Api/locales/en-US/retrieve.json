@@ -1,0 +1,10 @@
+{
+	"retrieve": {
+		"label": {
+			"node_name": "Name",
+			"maximo_url": "Maximo Url",
+			"resource": "Maximo Resource",
+			"hint": "Retrieve informatino from IBM Maximo"
+		}
+	}
+}
