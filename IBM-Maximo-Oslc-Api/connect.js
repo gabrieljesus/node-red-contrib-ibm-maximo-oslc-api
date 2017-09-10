@@ -37,9 +37,20 @@ module.exports = function(RED) {
 				}
 			};
 
-//TODO: check error
 			request(opts, function (error, response, body) {
+				if(error != null) {
+					msg.maximo = {
+						error: JSON.stringify(error)
+					}
+
+					msg.payload = "NOT CONNECTED";
+
+					node.send(msg);
+					return;
+				}
+
 				node.status({});
+
 				msg.maximo = {
 					session: response.headers["set-cookie"][0],
 					lean: lean,

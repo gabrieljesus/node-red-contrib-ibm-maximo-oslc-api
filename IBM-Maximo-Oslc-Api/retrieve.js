@@ -10,6 +10,11 @@ module.exports = function(RED) {
 
 		node.on('input', function(msg) {
 
+			if(msg.maximo.error != null) {
+				node.send(msg);
+				return;
+			}
+
 			var url = config.maximourl || msg.url;
 			
 			if (isTemplatedUrl) {
@@ -28,8 +33,17 @@ module.exports = function(RED) {
 					Cookie: msg.maximo.session
 				}
 			};
-//TODO: check error
+
 			request(opts, function (error, response, body) {
+				if(error != null) {
+					msg.maximo = {
+						error: JSON.stringify(error)
+					}
+
+					node.send(msg);
+					return;
+				}
+
 				node.status({});
 				msg.payload = {
 					response_body: JSON.parse(body)
