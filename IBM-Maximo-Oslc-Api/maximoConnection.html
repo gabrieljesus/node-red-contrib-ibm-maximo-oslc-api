@@ -1,0 +1,53 @@
+<script type="text/javascript">
+    RED.nodes.registerType('maximoConnection',{
+        category: 'config',
+        color: '#C0DEED',
+        icon: 'mx_icon.png',
+        defaults: {
+            name: {value:"",required:true},
+            maximourl: {value:"",required:true},
+            lean: {value:true},
+            tenantCode: {value:""}
+        },
+        credentials: {
+            username: {type:"text",required:true},
+            password: {type: "password",required:true}
+        },
+        inputs:1,
+        outputs:1,
+        label: function() {
+            return this.name||"Maximo Connection";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="maximoConnection">
+    <div class="form-row">
+        <label for="node-config-input-name"><i class="icon-tag"></i> <span data-i18n="maximoConnection.label.name"></span></label>
+        <input type="text" id="node-config-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-maximourl"><i class="icon-tag"></i> <span data-i18n="maximoConnection.label.maximo_url"></span></label>
+        <input type="text" id="node-config-input-maximourl" placeholder="Url">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-username"><i class="icon-tag"></i> <span data-i18n="maximoConnection.label.username"></label>
+        <input type="text" id="node-config-input-username" placeholder="Username">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-password"><i class="icon-tag"></i> <span data-i18n="maximoConnection.label.password"></label>
+        <input type="password" id="node-config-input-password" placeholder="Password">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-lean"><i class="icon-tag"></i> <span data-i18n="maximoConnection.label.lean"></label>
+        <input type="checkbox" id="node-config-input-lean" placeholder="Lean">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-tenantCode"><i class="icon-tag"></i> <span data-i18n="maximoConnection.label.tenantCode"></label>
+        <input type="text" id="node-config-input-tenantCode" placeholder="Tenant Code">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="maximoConnection">
+    <p><span data-i18n="maximoConnection.label.hint"></p>
+</script>

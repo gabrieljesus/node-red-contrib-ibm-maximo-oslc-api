@@ -1,13 +1,13 @@
 {
 	"retrieve": {
 		"label": {
-			"name": "Name",
-			"maximo_connection": "Maximo Connection",
-			"resource": "Maximo Resource",
+			"name": "Nome",
+			"maximo_connection": "Conexão com o Maximo",
+			"resource": "Resource do Maximo",
 			"select": "Select",
 			"where": "Where",
 			"pageSize": "Page Size",
-			"orderBy": "Order By",
+			"orderBy": "Ordenar Por",
 			"searchAttributes": "Search Attributes",
 			"searchTerms": "Search Terms",
 			"pageNumber": "Page Number",

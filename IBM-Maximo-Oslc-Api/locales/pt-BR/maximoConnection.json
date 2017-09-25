@@ -1,0 +1,13 @@
+{
+	"maximoConnection": {
+		"label": {
+			"name": "Nome",
+			"maximo_url": "Url do Maximo",
+			"username": "Usuário",
+			"password": "Senha",
+			"lean": "Lean",
+			"tenantCode": "Tenant Code",
+			"hint": "Detalhes de conexão com IBM Maximo"
+		}
+	}
+}

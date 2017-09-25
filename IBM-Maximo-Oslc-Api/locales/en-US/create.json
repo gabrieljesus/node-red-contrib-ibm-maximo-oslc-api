@@ -1,0 +1,11 @@
+{
+	"create": {
+		"label": {
+			"name": "Name",
+			"maximo_connection": "Maximo Connection",
+			"resource": "Maximo Resource",
+			"body": "Body",
+			"hint": "Retrieve information from IBM Maximo"
+		}
+	}
+}

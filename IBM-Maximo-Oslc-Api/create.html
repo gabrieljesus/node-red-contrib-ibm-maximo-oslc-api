@@ -1,0 +1,41 @@
+<script type="text/javascript">
+    RED.nodes.registerType('create',{
+        category: 'IBM Maximo',
+        color: '#C0DEED',
+        icon: 'mx_icon.png',
+        defaults: {
+            name: {value: ''},
+            resource: {value: '', required: true},
+            maximoConnection: {required: true, type: "maximoConnection"},
+            body: {value: '', required: true}
+        },
+        inputs:1,
+        outputs:1,
+        label: function() {
+            return this.name||"Create";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="create">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> <span data-i18n="create.label.name"></span></label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-maximoConnection"><i class="icon-tag"></i> <span data-i18n="create.label.maximo_connection"></span></label>
+        <input type="text" id="node-input-maximoConnection">
+    </div>
+    <div class="form-row">
+        <label for="node-input-resource"><i class="icon-tag"></i> <span data-i18n="create.label.resource"></label>
+        <input type="text" id="node-input-resource" placeholder="Resource">
+    </div>
+    <div class="form-row">
+        <label for="node-input-body"><i class="icon-tag"></i> <span data-i18n="create.label.body"></span></label>
+        <input type="text" id="node-input-body" placeholder="Body">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="create">
+    <p><span data-i18n="create.label.hint"></p>
+</script>
