@@ -1,5 +1,5 @@
 {
-	"retrieve": {
+	"maximoRetrieve": {
 		"label": {
 			"name": "Name",
 			"maximo_connection": "Maximo Connection",

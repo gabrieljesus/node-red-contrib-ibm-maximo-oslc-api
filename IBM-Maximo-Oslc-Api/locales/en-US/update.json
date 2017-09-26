@@ -1,0 +1,11 @@
+{
+	"maximoUpdate": {
+		"label": {
+			"name": "Name",
+			"maximo_connection": "Maximo Connection",
+			"resource": "Resource Url",
+			"body": "Body",
+			"hint": "Update information from IBM Maximo"
+		}
+	}
+}

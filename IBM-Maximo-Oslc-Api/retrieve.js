@@ -32,45 +32,43 @@ module.exports = function(RED) {
 			var addSchema = config.addSchema;
 			var collectionCount = config.collectionCount;
 			
-			if(lean === true)
+			if(lean)
 				qs.lean = 1;
 
-			if(tenantCode !== undefined)
+			if(tenantCode)
 				qs._tenantcode = tenantCode;
 
 			if(objectStructure.indexOf("{{") != -1)
 				objectStructure = mustache.render(objectStructure, message);
 			
-			if(select !== undefined)
+			if(select)
 				qs['oslc.select'] = select;
 			
-			if(where !== undefined)
+			if(where)
 				qs['oslc.where'] = where;
 			
-			if(orderBy !== undefined)
+			if(orderBy)
 				qs['oslc.orderBy'] = orderBy;
 			
-			if(pageSize !== undefined)
+			if(pageSize)
 				qs['oslc.pageSize'] = pageSize;
 			
-			if(pageNumber !== undefined)
+			if(pageNumber)
 				qs.pageno = pageNumber;
 			
-			if(searchAttributes !== undefined)
+			if(searchAttributes)
 				qs.searchAttributes = searchAttributes;
 			
-			if(searchTerms !== undefined)
+			if(searchTerms)
 				qs['oslc.searchTerms'] = searchTerms;
 			
-			if(respFormat !== undefined) {
-				if(respFormat != 'json')
-					qs._format = respFormat;
-			}
+			if(respFormat !== 'json')
+				qs._format = respFormat;
 			
-			if(addSchema === true)
+			if(addSchema)
 				qs.addSchema = 1;
 			
-			if(collectionCount === true)
+			if(collectionCount)
 				qs.collectioncount = 1;
 
 			// Check if we are already connected to Maximo
@@ -99,7 +97,6 @@ function retrieve(node, message, sessionInfo) {
 	};
 
 	request(opts, function (error, response, body) {
-		message.maximo = {};
 		if(error != null) {
 			node.status({fill:"red",shape:"dot",text:"error on retrieve"});
 			message.maximo.error = JSON.stringify(error);

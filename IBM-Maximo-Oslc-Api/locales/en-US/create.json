@@ -1,11 +1,12 @@
 {
-	"create": {
+	"maximoCreate": {
 		"label": {
 			"name": "Name",
 			"maximo_connection": "Maximo Connection",
 			"resource": "Maximo Resource",
 			"body": "Body",
-			"hint": "Retrieve information from IBM Maximo"
+			"resourceVarUrl": "Variable name where the create url will be stored",
+			"hint": "Create information on IBM Maximo"
 		}
 	}
 }

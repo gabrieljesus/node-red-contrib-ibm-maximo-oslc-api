@@ -1,7 +1,7 @@
 {
 	"maximoConnection": {
 		"label": {
-			"name": "Connection Name",
+			"name": "Name",
 			"maximo_url": "Maximo Url",
 			"username": "Username",
 			"password": "Password",

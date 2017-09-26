@@ -1,0 +1,36 @@
+<script type="text/javascript">
+    RED.nodes.registerType('delete',{
+        category: 'IBM Maximo',
+        color: '#C0DEED',
+        icon: 'mx_icon.png',
+        defaults: {
+            name: {value: ''},
+            resourceUrl: {value: '', required: true},
+            maximoConnection: {required: true, type: "maximoConnection"}
+        },
+        inputs:1,
+        outputs:1,
+        label: function() {
+            return this.name||"Delete";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="delete">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> <span data-i18n="maximoDelete.label.name"></span></label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-maximoConnection"><i class="icon-tag"></i> <span data-i18n="maximoDelete.label.maximo_connection"></span></label>
+        <input type="text" id="node-input-maximoConnection">
+    </div>
+    <div class="form-row">
+        <label for="node-input-resourceUrl"><i class="icon-tag"></i> <span data-i18n="maximoDelete.label.resource"></label>
+        <input type="text" id="node-input-resourceUrl" placeholder="Resource Url">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="delete">
+    <p><span data-i18n="delete.label.hint"></p>
+</script>

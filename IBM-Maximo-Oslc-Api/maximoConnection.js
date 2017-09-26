@@ -8,7 +8,7 @@ module.exports = function(RED) {
     function MaximoConnection(config) {
         RED.nodes.createNode(this, config);
         var maxObject = {
-        	tenantCode: config.tenandCode,
+        	tenantCode: config.tenantCode,
         	maxauth: Base64.encode(this.credentials.username + ':' + this.credentials.password),
         	lean: config.lean,
         	url: config.maximourl + '/oslc',

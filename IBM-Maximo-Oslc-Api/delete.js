@@ -5,24 +5,21 @@ var request = require('request');
 var mustache = require('mustache');
 
 var message;
-var objectStructure;
+var resourceUrl;
 var qs = {};
-var resourceVarUrl;
 
 module.exports = function(RED) {
-    function MaximoCreate(config) {
+    function MaximoDelete(config) {
         RED.nodes.createNode(this, config);
 
 		this.on('input', function(msg) {
 			message = msg;
-			objectStructure = config.resource;
+			resourceUrl = config.resourceUrl;
 			var localContext = this.context().flow.global;
 			var connectionName = RED.nodes.getNode(config.maximoConnection).name.replace(' ', '');
 			var sessionInfo = localContext.get(connectionName);
 			var lean = sessionInfo.lean;
 			var tenantCode = sessionInfo.tenantCode;
-			var body = config.body;
-			resourceVarUrl = config.resourceVarUrl;
 
 			if(lean === true)
 				qs.lean = 1;
@@ -30,43 +27,37 @@ module.exports = function(RED) {
 			if(tenantCode !== undefined)
 				qs._tenantcode = tenantCode;
 			
-			if(objectStructure.indexOf("{{") != -1) {
-				objectStructure = mustache.render(objectStructure, message);
-			}
-
-			if(body.indexOf("{{") != -1) {
-				body = mustache.render(body, message);
+			if(resourceUrl.indexOf("{{") != -1) {
+				resourceUrl = mustache.render(resourceUrl, message.maximo);
 			}
 
 			// Check if we are already connected to Maximo
 			if(sessionInfo.session === null) { // Connect
-				connect(this, sessionInfo, localContext, connectionName, create, body);
+				connect(this, sessionInfo, localContext, connectionName, deletefnc);
 			} else // Reuse the existing connection
-				create(this, message, sessionInfo, body);
+				deletefnc(this, message, sessionInfo);
         });
     }
 
-    RED.nodes.registerType('create', MaximoCreate);
+    RED.nodes.registerType('delete', MaximoDelete);
 }
 
-function create(node, message, sessionInfo, createBody) {
+function deletefnc(node, message, sessionInfo) {
 	node.status({fill:"green",shape:"ring",text:"sending"});
-	var url = sessionInfo.url + '/os/' + objectStructure;
+	var url = resourceUrl;
 
 	var opts = {
-		method: 'POST',
+		method: 'DELETE',
 		url: url,
 		qs: qs,
-		body: createBody,
 		headers: {
 			Cookie: sessionInfo.session,
-			'x-public-uri': sessionInfo.url
 		}
 	};
 
-	request(opts, function (error, response, body) {
+	request(opts, function (error, response, responseBody) {
 		if(error != null) {
-			node.status({fill:"red",shape:"dot",text:"error on create"});
+			node.status({fill:"red",shape:"dot",text:"error on delete"});
 			message.maximo.error = JSON.stringify(error);
 
 			node.send(message);
@@ -77,13 +68,10 @@ function create(node, message, sessionInfo, createBody) {
 		message.maximo.headers = response.headers;
 		message.maximo.statusCode = response.statusCode;
 		
-		if(response.statusCode !== 201)
-			node.status({fill:"red",shape:"dot",text:"not created"});
-		else {
+		if(response.statusCode !== 204)
+			node.status({fill:"red",shape:"dot",text:"not deleted"});
+		else
 			node.status({fill:"green",shape:"dot",text:"sent"});
-			if(resourceVarUrl !== undefined)
-				message.maximo[resourceVarUrl] = response.headers.location;
-		}
 
 		node.send(message);
 	});

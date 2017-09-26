@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-ibm-maximo-oslc-api",
-  "version": "0.0.11",
+  "version": "0.1.0",
   "description": "Maximo Oslc Api node for Node-RED",
   "keywords": [ "node-red", "ibm", "maximo" ],
   "scripts": {},
@@ -38,7 +38,9 @@
     "nodes": {
       "maximoConnection": "IBM-Maximo-Oslc-Api/maximoConnection.js",
       "retrieve": "IBM-Maximo-Oslc-Api/retrieve.js",
-      "create": "IBM-Maximo-Oslc-Api/create.js"
+      "create": "IBM-Maximo-Oslc-Api/create.js",
+      "update": "IBM-Maximo-Oslc-Api/update.js",
+      "delete": "IBM-Maximo-Oslc-Api/delete.js"
     }
   }
 }

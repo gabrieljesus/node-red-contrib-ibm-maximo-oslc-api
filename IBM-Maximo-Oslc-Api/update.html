@@ -1,0 +1,41 @@
+<script type="text/javascript">
+    RED.nodes.registerType('update',{
+        category: 'IBM Maximo',
+        color: '#C0DEED',
+        icon: 'mx_icon.png',
+        defaults: {
+            name: {value: ''},
+            resourceUrl: {value: '', required: true},
+            maximoConnection: {required: true, type: "maximoConnection"},
+            body: {value: '', required: true}
+        },
+        inputs:1,
+        outputs:1,
+        label: function() {
+            return this.name||"Update";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="update">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> <span data-i18n="maximoUpdate.label.name"></span></label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-maximoConnection"><i class="icon-tag"></i> <span data-i18n="maximoUpdate.label.maximo_connection"></span></label>
+        <input type="text" id="node-input-maximoConnection">
+    </div>
+    <div class="form-row">
+        <label for="node-input-resourceUrl"><i class="icon-tag"></i> <span data-i18n="maximoUpdate.label.resource"></label>
+        <input type="text" id="node-input-resourceUrl" placeholder="Resource Url">
+    </div>
+    <div class="form-row">
+        <label for="node-input-body"><i class="icon-tag"></i> <span data-i18n="maximoUpdate.label.body"></span></label>
+        <input type="text" id="node-input-body" placeholder="Body">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="update">
+    <p><span data-i18n="update.label.hint"></p>
+</script>

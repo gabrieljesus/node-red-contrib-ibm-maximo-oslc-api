@@ -1,0 +1,10 @@
+{
+	"maximoUpdate": {
+		"label": {
+			"name": "Nome",
+			"maximo_connection": "Conexão com o Maximo",
+			"resource": "Resource do Maximo",
+			"hint": "Apaga informações do IBM Maximo"
+		}
+	}
+}

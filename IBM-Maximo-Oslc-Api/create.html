@@ -7,7 +7,8 @@
             name: {value: ''},
             resource: {value: '', required: true},
             maximoConnection: {required: true, type: "maximoConnection"},
-            body: {value: '', required: true}
+            body: {value: '', required: true},
+            resourceVarUrl: {value: ''}
         },
         inputs:1,
         outputs:1,
@@ -19,20 +20,24 @@
 
 <script type="text/x-red" data-template-name="create">
     <div class="form-row">
-        <label for="node-input-name"><i class="icon-tag"></i> <span data-i18n="create.label.name"></span></label>
+        <label for="node-input-name"><i class="icon-tag"></i> <span data-i18n="maximoCreate.label.name"></span></label>
         <input type="text" id="node-input-name" placeholder="Name">
     </div>
     <div class="form-row">
-        <label for="node-input-maximoConnection"><i class="icon-tag"></i> <span data-i18n="create.label.maximo_connection"></span></label>
+        <label for="node-input-maximoConnection"><i class="icon-tag"></i> <span data-i18n="maximoCreate.label.maximo_connection"></span></label>
         <input type="text" id="node-input-maximoConnection">
     </div>
     <div class="form-row">
-        <label for="node-input-resource"><i class="icon-tag"></i> <span data-i18n="create.label.resource"></label>
+        <label for="node-input-resource"><i class="icon-tag"></i> <span data-i18n="maximoCreate.label.resource"></label>
         <input type="text" id="node-input-resource" placeholder="Resource">
     </div>
     <div class="form-row">
-        <label for="node-input-body"><i class="icon-tag"></i> <span data-i18n="create.label.body"></span></label>
+        <label for="node-input-body"><i class="icon-tag"></i> <span data-i18n="maximoCreate.label.body"></span></label>
         <input type="text" id="node-input-body" placeholder="Body">
+    </div>
+    <div class="form-row">
+        <label for="node-input-resourceVarUrl"><i class="icon-tag"></i> <span data-i18n="maximoCreate.label.resourceVarUrl"></span></label>
+        <input type="text" id="node-input-resourceVarUrl" placeholder="Variable">
     </div>
 </script>
 

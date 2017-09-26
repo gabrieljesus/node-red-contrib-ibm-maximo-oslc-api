@@ -1,0 +1,10 @@
+{
+	"maximoDelete": {
+		"label": {
+			"name": "Name",
+			"maximo_connection": "Maximo Connection",
+			"resource": "Resource Url",
+			"hint": "Delete information from IBM Maximo"
+		}
+	}
+}
