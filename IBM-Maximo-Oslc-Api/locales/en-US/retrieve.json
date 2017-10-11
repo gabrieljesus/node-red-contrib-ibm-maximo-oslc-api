@@ -4,6 +4,7 @@
 			"name": "Name",
 			"maximo_connection": "Maximo Connection",
 			"resource": "Maximo Resource",
+			"resourceType": "Resource Type",
 			"select": "Select",
 			"where": "Where",
 			"pageSize": "Page Size",

@@ -5,7 +5,8 @@
         icon: 'mx_icon.png',
         defaults: {
             name: {value: ''},
-            resource: {value: '', required: true},
+            resource: {value: '', required: function() {}},
+            resourceType: {value: 'objectStructure'},
             maximoConnection: {required: true, type: "maximoConnection"},
             select: {value: ''},
             where: {value: ''},
@@ -34,6 +35,13 @@
     <div class="form-row">
         <label for="node-input-maximoConnection"><i class="icon-tag"></i> <span data-i18n="maximoRetrieve.label.maximo_connection"></span></label>
         <input type="text" id="node-input-maximoConnection">
+    </div>
+    <div class="form-row">
+        <label for="node-input-resourceType"><i class="icon-tag"></i> <span data-i18n="maximoRetrieve.label.resourceType"></span></label>
+        <select type="select" id="node-input-resourceType">
+            <option value="objectStructure">Object Structure</option>
+            <option value="fullUrl">Full Url</option>
+        </select>
     </div>
     <div class="form-row">
         <label for="node-input-resource"><i class="icon-tag"></i> <span data-i18n="maximoRetrieve.label.resource"></label>

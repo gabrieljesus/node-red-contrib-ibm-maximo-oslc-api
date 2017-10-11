@@ -29,7 +29,7 @@ module.exports = function(RED) {
 				qs._tenantcode = tenantCode;
 			
 			if(resourceUrl.indexOf("{{") != -1) {
-				resourceUrl = mustache.render(resourceUrl, message.maximo);
+				resourceUrl = mustache.render(resourceUrl, message);
 			}
 
 			if(body.indexOf("{{") != -1) {
@@ -38,7 +38,7 @@ module.exports = function(RED) {
 
 			// Check if we are already connected to Maximo
 			if(sessionInfo.session === null) { // Connect
-				connect(this, sessionInfo, localContext, connectionName, update, body);
+				connect(this, message, sessionInfo, localContext, connectionName, update, body);
 			} else // Reuse the existing connection
 				update(this, message, sessionInfo, body);
         });
@@ -65,22 +65,27 @@ function update(node, message, sessionInfo, body) {
 	};
 
 	request(opts, function (error, response, responseBody) {
+		message.maximo = {
+			request: opts,
+			response: {}
+		};
+
 		if(error != null) {
 			node.status({fill:"red",shape:"dot",text:"error on update"});
-			message.maximo.error = JSON.stringify(error);
+			message.maximo.response.error = JSON.stringify(error);
 
 			node.send(message);
 			return;
 		}
 
-		message.maximo.payload = 'No content';
-		message.maximo.headers = response.headers;
-		message.maximo.statusCode = response.statusCode;
+		message.maximo.response.payload = 'No content';
+		message.maximo.response.headers = response.headers;
+		message.maximo.response.statusCode = response.statusCode;
 		
 		if(response.statusCode !== 204)
 			node.status({fill:"red",shape:"dot",text:"not updated"});
 		else
-			node.status({fill:"green",shape:"dot",text:"sent"});
+			node.status({fill:"green",shape:"dot",text:"updated"});
 
 		node.send(message);
 	});

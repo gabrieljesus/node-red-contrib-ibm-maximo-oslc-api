@@ -40,7 +40,7 @@ module.exports = function(RED) {
 
 			// Check if we are already connected to Maximo
 			if(sessionInfo.session === null) { // Connect
-				connect(this, sessionInfo, localContext, connectionName, create, body);
+				connect(this, message, sessionInfo, localContext, connectionName, create, body);
 			} else // Reuse the existing connection
 				create(this, message, sessionInfo, body);
         });
@@ -65,24 +65,29 @@ function create(node, message, sessionInfo, createBody) {
 	};
 
 	request(opts, function (error, response, body) {
+		message.maximo = {
+			request: opts,
+			response: {}
+		};
+
 		if(error != null) {
 			node.status({fill:"red",shape:"dot",text:"error on create"});
-			message.maximo.error = JSON.stringify(error);
+			message.maximo.response.error = JSON.stringify(error);
 
 			node.send(message);
 			return;
 		}
 
-		message.maximo.payload = 'No content';
-		message.maximo.headers = response.headers;
-		message.maximo.statusCode = response.statusCode;
+		message.maximo.response.payload = 'No content';
+		message.maximo.response.headers = response.headers;
+		message.maximo.response.statusCode = response.statusCode;
 		
 		if(response.statusCode !== 201)
 			node.status({fill:"red",shape:"dot",text:"not created"});
 		else {
-			node.status({fill:"green",shape:"dot",text:"sent"});
+			node.status({fill:"green",shape:"dot",text:"created"});
 			if(resourceVarUrl !== undefined)
-				message.maximo[resourceVarUrl] = response.headers.location;
+				message[resourceVarUrl] = response.headers.location;
 		}
 
 		node.send(message);

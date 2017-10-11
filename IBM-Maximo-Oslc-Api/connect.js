@@ -1,6 +1,6 @@
 var request = require('request');
 
-function connect(node, sessionInfo, context, connectionName, cb, body) {
+function connect(node, message, sessionInfo, context, connectionName, cb, body) {
 	node.status({fill:"yellow",shape:"ring",text:"connecting"});
 	var url = sessionInfo.url + '/login';
 	var qs = {};
@@ -22,33 +22,33 @@ function connect(node, sessionInfo, context, connectionName, cb, body) {
 		resolveWithFullResponse: true
 	};
 
-	var msg = {};
-
 	request(opts, function(error, response, respBody) {
+		message.maximo = {
+			request: opts,
+			response: {}
+		};
+
 		if(error !== null) {
 			node.status({fill:"red",shape:"dot",text:"error on connecting"});
-			msg.maximo = {
-				error: JSON.stringify(error),
-			}
+			message.maximo.response.error = JSON.stringify(error);
 			
-			msg.maximo.payload = "NOT CONNECTED. Check if the Maximo is up and running!";
-			node.send(msg);
+			message.maximo.response.payload = "NOT CONNECTED. Check if the Maximo is up and running!";
+			node.send(message);
 			node.error("NOT CONNECTED. Check if the Maximo is up and running!");
 			return;
 		} else {
 			node.status({fill:"yellow",shape:"dot",text:"connected"});
-			msg.maximo = {
-				payload: respBody,
-				headers: response.headers,
-				statusCode: response.statusCode,
-				session: response.headers["set-cookie"][0]
-			};
-			node.warn(msg);
+			message.maximo.response.payload = respBody;
+			message.maximo.response.headers = response.headers;
+			message.maximo.response.statusCode = response.statusCode;
+			message.maximo.response.session = response.headers["set-cookie"][0];
+
+			node.warn(message);
 
 			sessionInfo.session = response.headers["set-cookie"][0];
 
 			context.set(connectionName, sessionInfo);
-			cb(node, msg, sessionInfo, body);
+			cb(node, message, sessionInfo, body);
 		}
 	});
 }

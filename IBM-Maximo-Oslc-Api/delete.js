@@ -15,6 +15,7 @@ module.exports = function(RED) {
 		this.on('input', function(msg) {
 			message = msg;
 			resourceUrl = config.resourceUrl;
+
 			var localContext = this.context().flow.global;
 			var connectionName = RED.nodes.getNode(config.maximoConnection).name.replace(' ', '');
 			var sessionInfo = localContext.get(connectionName);
@@ -28,12 +29,12 @@ module.exports = function(RED) {
 				qs._tenantcode = tenantCode;
 			
 			if(resourceUrl.indexOf("{{") != -1) {
-				resourceUrl = mustache.render(resourceUrl, message.maximo);
+				resourceUrl = mustache.render(resourceUrl, message);
 			}
 
 			// Check if we are already connected to Maximo
 			if(sessionInfo.session === null) { // Connect
-				connect(this, sessionInfo, localContext, connectionName, deletefnc);
+				connect(this, message, sessionInfo, localContext, connectionName, deletefnc);
 			} else // Reuse the existing connection
 				deletefnc(this, message, sessionInfo);
         });
@@ -56,22 +57,27 @@ function deletefnc(node, message, sessionInfo) {
 	};
 
 	request(opts, function (error, response, responseBody) {
+		message.maximo = {
+			request: opts,
+			response: {}
+		};
+
 		if(error != null) {
 			node.status({fill:"red",shape:"dot",text:"error on delete"});
-			message.maximo.error = JSON.stringify(error);
+			message.maximo.response.error = JSON.stringify(error);
 
 			node.send(message);
 			return;
 		}
 
-		message.maximo.payload = 'No content';
-		message.maximo.headers = response.headers;
-		message.maximo.statusCode = response.statusCode;
+		message.maximo.response.payload = 'No content';
+		message.maximo.response.headers = response.headers;
+		message.maximo.response.statusCode = response.statusCode;
 		
 		if(response.statusCode !== 204)
 			node.status({fill:"red",shape:"dot",text:"not deleted"});
 		else
-			node.status({fill:"green",shape:"dot",text:"sent"});
+			node.status({fill:"green",shape:"dot",text:"deleted"});
 
 		node.send(message);
 	});
