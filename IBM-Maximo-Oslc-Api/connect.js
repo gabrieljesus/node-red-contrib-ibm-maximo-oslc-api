@@ -43,8 +43,6 @@ function connect(node, message, sessionInfo, context, connectionName, cb, body) 
 			message.maximo.response.statusCode = response.statusCode;
 			message.maximo.response.session = response.headers["set-cookie"][0];
 
-			node.warn(message);
-
 			sessionInfo.session = response.headers["set-cookie"][0];
 
 			context.set(connectionName, sessionInfo);

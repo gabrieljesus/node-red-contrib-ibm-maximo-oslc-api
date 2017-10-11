@@ -7,7 +7,6 @@ var mustache = require('mustache');
 var message;
 var objectStructure;
 var qs = {};
-var resourceVarUrl;
 
 module.exports = function(RED) {
     function MaximoCreate(config) {
@@ -22,13 +21,16 @@ module.exports = function(RED) {
 			var lean = sessionInfo.lean;
 			var tenantCode = sessionInfo.tenantCode;
 			var body = config.body;
-			resourceVarUrl = config.resourceVarUrl;
 
 			if(lean === true)
 				qs.lean = 1;
 
-			if(tenantCode !== undefined)
+			if(tenantCode) {
+				if(tenantCode.indexOf("{{") != -1)
+					tenantCode = mustache.render(tenantCode, message);
+
 				qs._tenantcode = tenantCode;
+			}
 			
 			if(objectStructure.indexOf("{{") != -1) {
 				objectStructure = mustache.render(objectStructure, message);
@@ -84,11 +86,8 @@ function create(node, message, sessionInfo, createBody) {
 		
 		if(response.statusCode !== 201)
 			node.status({fill:"red",shape:"dot",text:"not created"});
-		else {
+		else
 			node.status({fill:"green",shape:"dot",text:"created"});
-			if(resourceVarUrl !== undefined)
-				message[resourceVarUrl] = response.headers.location;
-		}
 
 		node.send(message);
 	});

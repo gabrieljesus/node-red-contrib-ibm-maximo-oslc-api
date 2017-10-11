@@ -5,7 +5,6 @@
 			"maximo_connection": "Conexão com o Maximo",
 			"resource": "Resource do Maximo",
 			"body": "Body",
-			"resourceVarUrl": "Nome da variável onde a url será armazenada",
 			"hint": "Cria informações no IBM Maximo"
 		}
 	}

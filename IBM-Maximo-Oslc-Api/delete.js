@@ -25,8 +25,12 @@ module.exports = function(RED) {
 			if(lean === true)
 				qs.lean = 1;
 
-			if(tenantCode !== undefined)
+			if(tenantCode) {
+				if(tenantCode.indexOf("{{") != -1)
+					tenantCode = mustache.render(tenantCode, message);
+
 				qs._tenantcode = tenantCode;
+			}
 			
 			if(resourceUrl.indexOf("{{") != -1) {
 				resourceUrl = mustache.render(resourceUrl, message);

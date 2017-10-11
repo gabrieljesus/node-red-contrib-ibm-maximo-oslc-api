@@ -156,10 +156,10 @@ function retrieve(node, message, sessionInfo) {
 		
 		message.maximo.response.statusCode = response.statusCode;
 		
-		if(response.statusCode === 200)
-			node.status({fill:"green",shape:"dot",text:"retrieved"});
-		else
+		if(response.statusCode !== 200)
 			node.status({fill:"red",shape:"dot",text:"not retrieved"});
+		else
+			node.status({fill:"green",shape:"dot",text:"retrieved"});
 
 		message.maximo.response.payload = JSON.parse(body);
 		message.maximo.response.headers = response.headers;
