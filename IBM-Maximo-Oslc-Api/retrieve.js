@@ -12,7 +12,7 @@ var qs;
 module.exports = function(RED) {
     function MaximoRetrieve(config) {
         RED.nodes.createNode(this, config);
-
+	
 		this.on('input', function(msg) {
 			message = msg;
 			qs = {};
@@ -23,7 +23,7 @@ module.exports = function(RED) {
 			var sessionInfo = localContext.get(connectionName);
 			var lean = sessionInfo.lean;
 			var tenantCode = sessionInfo.tenantCode;
-
+		    
 			var select = config.select;
 			var where = config.where;
 			var orderBy = config.orderBy;
@@ -124,12 +124,12 @@ module.exports = function(RED) {
 function retrieve(node, message, sessionInfo) {
 	node.status({fill:"green",shape:"ring",text:"sending"});
 	var url;
-	
+
 	if(resourceType === "objectStructure")
 		url = sessionInfo.url + '/os/' + objectStructure;
 	else
 		url = objectStructure;
-	
+
 	var opts = {
 		method: 'GET',
 		url: url,
@@ -137,9 +137,14 @@ function retrieve(node, message, sessionInfo) {
 		headers: {
 			Cookie: sessionInfo.session,
 			'x-public-uri': sessionInfo.url
-		}
+		},
+	    rejectUnauthorized: sessionInfo.rejectUnauthorized
 	};
 
+    node.warn(JSON.stringify(opts));
+
+
+    
 	request(opts, function (error, response, body) {
 		message.maximo = {
 			request: opts,

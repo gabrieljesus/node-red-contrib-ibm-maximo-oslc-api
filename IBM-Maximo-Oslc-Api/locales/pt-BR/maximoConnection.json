@@ -6,7 +6,8 @@
 			"username": "Usuário",
 			"password": "Senha",
 			"lean": "Lean",
-			"tenantCode": "Tenant Code",
+		    "tenantCode": "Tenant Code",
+		    "rejectUnauthorized": "Secure HTTPS Only",
 			"hint": "Detalhes de conexão com IBM Maximo"
 		}
 	}

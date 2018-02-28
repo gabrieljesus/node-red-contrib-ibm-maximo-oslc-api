@@ -11,7 +11,6 @@ module.exports = function(RED) {
 		var tenantCode = config.tenantCode;
 		var lean = config.lean;
 		var url = config.maximourl;
-
 		if(tenantCode) {
 			if(tenantCode.indexOf("{{") != -1)
 				tenantCode = mustache.render(tenantCode, message);
@@ -31,7 +30,8 @@ module.exports = function(RED) {
         	tenantCode: config.tenantCode,
         	maxauth: Base64.encode(this.credentials.username + ':' + this.credentials.password),
         	lean: config.lean,
-        	url: config.maximourl + '/oslc',
+            url: config.maximourl + '/oslc',
+	    rejectUnauthorized: config.rejectUnauthorized,
         	session: null
         };
         this.context().global.set(config.name.replace(' ', ''), maxObject);
