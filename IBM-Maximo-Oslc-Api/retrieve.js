@@ -146,12 +146,33 @@ function retrieve(node, message, sessionInfo) {
 			response: {}
 		};
 
-		if(error != null) {
-			node.status({fill:"red",shape:"dot",text:"error on retrieve"});
-			message.maximo.response.error = JSON.stringify(error);
+		var jsonBody;
+		if(body != null && body.length > 0)
+			jsonBody = JSON.parse(body);
+		else
+			jsonBody = {}
 
-			node.send(message);
-			return;
+		if(error != null || jsonBody.Error != null) {
+			if(jsonBody.Error.reasonCode === "BMXAA0021E") {
+				var localContext = node.context().flow.global;
+				var connectionName;
+				for(let element of localContext.keys()) {
+					if(element !== "get" && element !== "set" && element !== "keys") {
+						if(localContext.get(element).session === sessionInfo.session) {
+							connectionName = element;
+							break;
+						}
+					}
+				}
+				connect(node, message, sessionInfo, localContext, connectionName, retrieve);
+				return;
+			} else {
+				node.status({fill:"red",shape:"dot",text:"error on retrieve"});
+				message.maximo.response.error = JSON.stringify(error);
+
+				node.send(message);
+				return;
+			}
 		}
 		
 		message.maximo.response.statusCode = response.statusCode;
@@ -161,7 +182,7 @@ function retrieve(node, message, sessionInfo) {
 		else
 			node.status({fill:"green",shape:"dot",text:"retrieved"});
 
-		message.maximo.response.payload = JSON.parse(body);
+		message.maximo.response.payload = jsonBody;
 		message.maximo.response.headers = response.headers;
 
 		node.send(message);

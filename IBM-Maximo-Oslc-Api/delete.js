@@ -66,12 +66,33 @@ function deletefnc(node, message, sessionInfo) {
 			response: {}
 		};
 
-		if(error != null) {
-			node.status({fill:"red",shape:"dot",text:"error on delete"});
-			message.maximo.response.error = JSON.stringify(error);
+		var jsonBody;
+		if(responseBody != null && responseBody.length > 0)
+			jsonBody = JSON.parse(responseBody);
+		else
+			jsonBody = {}
 
-			node.send(message);
-			return;
+		if(error != null || jsonBody.Error != null) {
+			if(jsonBody.Error.reasonCode === "BMXAA0021E") {
+				var localContext = node.context().flow.global;
+				var connectionName;
+				for(let element of localContext.keys()) {
+					if(element !== "get" && element !== "set" && element !== "keys") {
+						if(localContext.get(element).session === sessionInfo.session) {
+							connectionName = element;
+							break;
+						}
+					}
+				}
+				connect(node, message, sessionInfo, localContext, connectionName, deletefnc);
+				return;
+			} else {
+				node.status({fill:"red",shape:"dot",text:"error on delete"});
+				message.maximo.response.error = JSON.stringify(error);
+
+				node.send(message);
+				return;
+			}
 		}
 
 		message.maximo.response.payload = 'No content';
