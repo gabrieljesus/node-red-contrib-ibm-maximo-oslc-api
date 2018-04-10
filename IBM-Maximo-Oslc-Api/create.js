@@ -63,13 +63,15 @@ function create(node, message, sessionInfo, createBody) {
 		headers: {
 			Cookie: sessionInfo.session,
 			'x-public-uri': sessionInfo.url
-		}
+		},
+	    rejectUnauthorized: sessionInfo.rejectUnauthorized
+
 	};
 
 	request(opts, function (error, response, body) {
 		message.maximo = {
 			request: opts,
-			response: {}
+		    response: {}
 		};
 
 		var jsonBody;

@@ -65,7 +65,8 @@ function update(node, message, sessionInfo, body) {
 			'x-public-uri': sessionInfo.url,
 			'x-method-override': 'PATCH',
 			'patchtype': 'MERGE'
-		}
+		},
+	    rejectUnauthorized: sessionInfo.rejectUnauthorized
 	};
 
 	request(opts, function (error, response, responseBody) {

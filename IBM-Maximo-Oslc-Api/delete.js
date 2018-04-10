@@ -57,7 +57,8 @@ function deletefnc(node, message, sessionInfo) {
 		qs: qs,
 		headers: {
 			Cookie: sessionInfo.session,
-		}
+		},
+	    rejectUnauthorized: sessionInfo.rejectUnauthorized
 	};
 
 	request(opts, function (error, response, responseBody) {

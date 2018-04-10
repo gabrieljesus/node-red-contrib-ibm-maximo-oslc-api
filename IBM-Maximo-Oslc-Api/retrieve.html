@@ -92,6 +92,25 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="retrieve">
-    <p><span data-i18n="maximoRetrieve.label.hint"></p>
+<script type="text/x-red" data-help-name="Retrieve">
+    
+    <p><span data-i18n="maximoRetrieve.label.hint">"Retrieve Maximo Object Structure specified by Resource and filtered by searchAttributes"</p>
+
+    <h3>Inputs</h3>
+
+    <h3>Outputs</h3>
+        <ol class="node-ports">
+        <li>Standard output
+             <dl class="message-properties">
+                 <dt>message.maximo.response.payload <span class="property-type">json</span></dt>
+                 <dd>The payload returned by Maximo OSLC API</dd>
+             </dl>
+         </li>
+         <li>Standard error
+             <dl class="message-properties">
+                 <dt>message.maximo.response.headers<span class="property-type">json</span></dt>
+                 <dd>Maximo standard header.</dd>
+             </dl>
+         </li>
+     </ol>
 </script>
