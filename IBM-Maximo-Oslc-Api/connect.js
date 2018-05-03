@@ -23,6 +23,7 @@ function connect(node, message, sessionInfo, context, connectionName, cb, body) 
 	    resolveWithFullResponse: true
 	};
 
+
 	request(opts, function(error, response, respBody) {
 		message.maximo = {
 			request: opts,
@@ -30,12 +31,13 @@ function connect(node, message, sessionInfo, context, connectionName, cb, body) 
 		};
 
 		if(error !== null) {
-			node.status({fill:"red",shape:"dot",text:"error on connecting, check payload for error"});
-			message.maximo.response.error = JSON.stringify(error);
+		    node.status({fill:"red",shape:"dot",text:"error on connecting, check payload for error"});
+		    var errStr = JSON.stringify(error);
+		    message.maximo.response.error = errStr;
 			
 			message.maximo.response.payload = "NOT CONNECTED. Check if the Maximo is up and running!";
 			node.send(message);
-		    node.error("NOT CONNECTED. " + error);
+		    node.error("NOT CONNECTED. " + errStr);
 		    return;
 		} else {
 			node.status({fill:"yellow",shape:"dot",text:"connected"});
