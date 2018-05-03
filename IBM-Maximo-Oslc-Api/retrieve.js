@@ -12,7 +12,7 @@ var qs;
 module.exports = function(RED) {
     function MaximoRetrieve(config) {
         RED.nodes.createNode(this, config);
-	
+
 		this.on('input', function(msg) {
 			message = msg;
 			qs = {};
@@ -23,7 +23,7 @@ module.exports = function(RED) {
 			var sessionInfo = localContext.get(connectionName);
 			var lean = sessionInfo.lean;
 			var tenantCode = sessionInfo.tenantCode;
-		    
+
 			var select = config.select;
 			var where = config.where;
 			var orderBy = config.orderBy;
@@ -34,7 +34,7 @@ module.exports = function(RED) {
 			var respFormat = config.respFormat;
 			var addSchema = config.addSchema;
 			var collectionCount = config.collectionCount;
-			
+
 			if(lean)
 				qs.lean = 1;
 
@@ -47,66 +47,66 @@ module.exports = function(RED) {
 
 			if(objectStructure.indexOf("{{") != -1)
 				objectStructure = mustache.render(objectStructure, message);
-			
+
 			if(select) {
 				if(select.indexOf("{{") != -1)
 					select = mustache.render(select, message);
-				
+
 				qs['oslc.select'] = select;
 			}
-			
 			if(where) {
 				if(where.indexOf("{{") != -1)
 					where = mustache.render(where, message);
 
+
 				qs['oslc.where'] = where;
 			}
-			
+
 			if(orderBy) {
 				if(orderBy.indexOf("{{") != -1)
 					orderBy = mustache.render(orderBy, message);
 
 				qs['oslc.orderBy'] = orderBy;
 			}
-			
+
 			if(pageSize) {
 				if(pageSize.indexOf("{{") != -1)
 					pageSize = mustache.render(pageSize, message);
 
 				qs['oslc.pageSize'] = pageSize;
 			}
-			
+
 			if(pageNumber) {
 				if(pageNumber.indexOf("{{") != -1)
 					pageNumber = mustache.render(pageNumber, message);
 
 				qs.pageno = pageNumber;
 			}
-			
+
 			if(searchAttributes) {
 				if(searchAttributes.indexOf("{{") != -1)
 					searchAttributes = mustache.render(searchAttributes, message);
 
 				qs.searchAttributes = searchAttributes;
 			}
-			
+
 			if(searchTerms) {
 				if(searchTerms.indexOf("{{") != -1)
 					searchTerms = mustache.render(searchTerms, message);
 
 				qs['oslc.searchTerms'] = searchTerms;
 			}
-			
+
 			if(respFormat !== 'json') {
 				if(respFormat.indexOf("{{") != -1)
 					respFormat = mustache.render(respFormat, message);
 
 				qs._format = respFormat;
 			}
-			
+
 			if(addSchema)
 				qs.addSchema = 1;
-			
+
 			if(collectionCount)
 				qs.collectioncount = 1;
 
@@ -126,9 +126,9 @@ function retrieve(node, message, sessionInfo) {
 	var url;
 
 	if(resourceType === "objectStructure")
-		url = sessionInfo.url + '/os/' + objectStructure;
+		url = sessionInfo.url + '/os/' + encodeURI(objectStructure);
 	else
-		url = objectStructure;
+		url = encodeURI(objectStructure);
 
 	var opts = {
 		method: 'GET',
@@ -144,7 +144,7 @@ function retrieve(node, message, sessionInfo) {
     node.warn(JSON.stringify(opts));
 
 
-    
+
 	request(opts, function (error, response, body) {
 		message.maximo = {
 			request: opts,
@@ -158,9 +158,9 @@ function retrieve(node, message, sessionInfo) {
 			node.send(message);
 			return;
 		}
-		
+
 		message.maximo.response.statusCode = response.statusCode;
-		
+
 		if(response.statusCode !== 200)
 			node.status({fill:"red",shape:"dot",text:"not retrieved"});
 		else
