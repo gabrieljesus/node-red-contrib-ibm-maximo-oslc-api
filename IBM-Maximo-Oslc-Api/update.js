@@ -36,6 +36,8 @@ module.exports = function(RED) {
 				resourceUrl = mustache.render(resourceUrl, message);
 			}
 
+			console.log("Resource URL: " + resourceUrl);
+
 			if(body.indexOf("{{") != -1) {
 				body = mustache.render(body, message);
 			}
@@ -55,6 +57,8 @@ function update(node, message, sessionInfo, body) {
 	node.status({fill:"green",shape:"ring",text:"sending"});
 	var url = resourceUrl;
 
+	node.warn(url);
+	
 	var opts = {
 		method: 'POST',
 		url: url,
@@ -75,23 +79,44 @@ function update(node, message, sessionInfo, body) {
 			response: {}
 		};
 
+		node.warn(JSON.stringify(opts));
+
 		if(error != null) {
 			node.status({fill:"red",shape:"dot",text:"error on update"});
 			message.maximo.response.error = JSON.stringify(error);
-
+			node.warn(error);
 			node.send(message);
 			return;
 		}
 
-		message.maximo.response.payload = 'No content';
+
 		message.maximo.response.headers = response.headers;
 		message.maximo.response.statusCode = response.statusCode;
 		
-		if(response.statusCode !== 204)
+		if(response.statusCode > 400) {
+			message.maximo.response.payload = responseBody;
 			node.status({fill:"red",shape:"dot",text:"not updated"});
-		else
+		} else {
 			node.status({fill:"green",shape:"dot",text:"updated"});
-
+			switch(responseBody.statusCode) {
+				case 200:
+					message.maximo.response.payload = 'OK';
+					break;
+				case 200:
+					message.maximo.response.payload = 'Created';
+					break;
+				case 204:
+					message.maximo.response.payload = 'No content';
+					break;
+				case 204:
+					message.maximo.response.payload = 'access issue';
+					break;
+				default: 
+					message.maximo.response.payload = 'No content';
+				
+			}
+		}
+			
 		node.send(message);
 	});
 }

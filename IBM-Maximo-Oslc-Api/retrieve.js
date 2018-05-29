@@ -153,21 +153,25 @@ function retrieve(node, message, sessionInfo) {
 
 		if(error != null) {
 			node.status({fill:"red",shape:"dot",text:"error on retrieve"});
-			message.maximo.response.error = JSON.stringify(error);
+			if(Object.keys(error) > 0) {
+				message.maximo.response.error = JSON.stringify(error);
 
+			} else {
+				message.maximo.response.error = error;
+			}
+			node.warn(error.length);
+			node.warn(error);
 			node.send(message);
 			return;
 		}
-
 		message.maximo.response.statusCode = response.statusCode;
+		message.maximo.response.headers = response.headers;
+		message.maximo.response.payload = JSON.parse(body);
 
 		if(response.statusCode !== 200)
 			node.status({fill:"red",shape:"dot",text:"not retrieved"});
 		else
 			node.status({fill:"green",shape:"dot",text:"retrieved"});
-
-		message.maximo.response.payload = JSON.parse(body);
-		message.maximo.response.headers = response.headers;
 
 		node.send(message);
 	});
