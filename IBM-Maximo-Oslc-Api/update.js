@@ -74,43 +74,51 @@ function update(node, message, sessionInfo, body) {
 			response: {}
 		};
 
+		if(error !== null) {
+			node.status({fill:"red",shape:"dot",text:"error on update"});
+			message.maximo.response.error = error;
+
+			node.send(message);
+			return;
+		}
+		
 		var jsonBody;
 		if(responseBody != null && responseBody.length > 0)
-			jsonBody = JSON.parse(responseBody);
-		else
-			jsonBody = {}
-
-		if(error != null || jsonBody.Error != null) {
-			if(jsonBody.Error.reasonCode === "BMXAA0021E") {
-				var localContext = node.context().flow.global;
-				var connectionName;
-				for(let element of localContext.keys()) {
-					if(element !== "get" && element !== "set" && element !== "keys") {
-						if(localContext.get(element).session === sessionInfo.session) {
-							connectionName = element;
-							break;
-						}
-					}
-				}
-				connect(node, message, sessionInfo, localContext, connectionName, update, body);
-				return;
-			} else {
+			try {
+				jsonBody = JSON.parse(responseBody);
+			} catch {
 				node.status({fill:"red",shape:"dot",text:"error on update"});
-				message.maximo.response.error = JSON.stringify(error);
+				message.maximo.response.error = responseBody;
 
 				node.send(message);
 				return;
 			}
+		else
+			jsonBody = {}
+
+		if(jsonBody.Error) {
+			var localContext = node.context().flow.global;
+			var connectionName;
+			for(let element of localContext.keys()) {
+				if(element !== "get" && element !== "set" && element !== "keys") {
+					if(localContext.get(element).session === sessionInfo.session) {
+						connectionName = element;
+						break;
+					}
+				}
+			}
+			connect(node, message, sessionInfo, localContext, connectionName, update, body);
+			return;
 		}
 
 		message.maximo.response.payload = 'No content';
 		message.maximo.response.headers = response.headers;
 		message.maximo.response.statusCode = response.statusCode;
 		
-		if(response.statusCode !== 204)
-			node.status({fill:"red",shape:"dot",text:"not updated"});
-		else
+		if(response.statusCode === 204)
 			node.status({fill:"green",shape:"dot",text:"updated"});
+		else
+			node.status({fill:"red",shape:"dot",text:"not updated"});
 
 		node.send(message);
 	});
