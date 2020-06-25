@@ -35,7 +35,7 @@
   "homepage": "https://github.com/gabrieljesus/node-red-contrib-ibm-maximo-oslc-api#readme",
   "dependencies": {
     "mustache": "^2.3.0",
-    "node-red": "^0.19.6",
+    "node-red": "^1.0.6",
     "request": "^2.88.0"
   },
   "node-red": {
